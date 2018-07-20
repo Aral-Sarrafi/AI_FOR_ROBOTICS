@@ -3,12 +3,12 @@ import numpy as np
 import Classes as cs
 
 def path_generator(t):
-    a = 0.5
+    a = 1
     theta = a*t
     r = theta
 
-    x = r*cos(theta)
-    y = r*sin(theta)
+    x = r* cos(theta)
+    y = r* sin(theta)
 
     xdot = a*cos(a*t) - (a**2)*sin(a*t)
     ydot = a*sin(a*t) + (a**2)*cos(a*t)
@@ -35,17 +35,19 @@ def Kalman_Filter_Initiator(kalman_filter, measurement, dt, noise_std):
     P[2, 2] = 1000
     P[3, 3] = 1000
     # Process Noise Covariance Matrix
-    noise_ax = 9
-    noise_ay = 9
+
+    noise_ax = 10
+    noise_ay = 10
+
     dt2 = dt ** 2
     dt3 = dt ** 3
     dt4 = dt ** 4
     Q = np.array([[dt4 * noise_ax / 4, 0, dt3 * noise_ax / 2, 0],
                   [0, dt4 * noise_ay / 4, 0, dt3 * noise_ay / 2],
-                  [dt4 * noise_ax / 4, 0, dt2 * noise_ax, 0],
-                  [0, dt4 * noise_ay / 4, 0, dt2 * noise_ay]])
+                  [dt3 * noise_ax / 2, 0, dt2 * noise_ax, 0],
+                  [0, dt3 * noise_ay / 2, 0, dt2 * noise_ay]])
     # Measurement Noise Covariance Matrix
-    R = noise_std * np.identity(len(measurement))
+    R = (noise_std**2) * np.identity(len(measurement))
 
     # Initiate the Kalman Filter
     kalman_filter = cs.kalman_filter(X_in=X, F_in=F, H_in=H,

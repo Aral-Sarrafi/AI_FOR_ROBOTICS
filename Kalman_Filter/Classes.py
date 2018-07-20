@@ -43,5 +43,3 @@ class kalman_filter:
 
         self.X = self.X + K @ y
         self.P = (I - K @ self.H) @ self.P
-
-

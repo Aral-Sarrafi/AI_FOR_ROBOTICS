@@ -6,7 +6,7 @@ import Functions as fnc
 
 
 
-noise_std = 0.15
+noise_std = 0.25
 path = []
 laser = []
 estimation = []
@@ -45,18 +45,24 @@ laser = np.array(laser)
 estimation = np.array(estimation)
 
 # Creat the Animation
-
+off_set = 2
 fig = plt.figure()
-ax1 = plt.axes(xlim=(-15, 15), ylim=(-15,15))
+ax1 = plt.axes(xlim=(np.min(path[:,0]-off_set), np.max(path[:,0]+off_set)),
+               ylim=(np.min(path[:,1]-off_set), np.max(path[:,1]+off_set)))
 line, = ax1.plot([], [], lw=2)
 plt.xlabel('X')
 plt.ylabel('Y')
 
 lines = []
 
-lobj_path, = ax1.plot([],[],lw=2,color= "black")
-lobj_laser, = ax1.plot([],[],'o' ,lw=2,color= "red")
-lobj_est, = ax1.plot([],[],'*',lw=2,color= "blue")
+lobj_path, = ax1.plot([],[], '.', markersize=2,lw=1, color= "black", label='Ground Truth')
+lobj_laser, = ax1.plot([],[], 'o', markersize=2,lw=1, color= "red", label='Laser')
+lobj_est, = ax1.plot([],[], '*', markersize=2,lw=1, color= "blue", label='Kalman Filter')
+
+handles, labels = ax1.get_legend_handles_labels()
+ax1.legend(handles, labels)
+
+
 
 lines = [lobj_path,lobj_laser,lobj_est]
 
@@ -104,6 +110,7 @@ def animate(i):
 
 # call the animator.  blit=True means only re-draw the parts that have changed.
 anim = animation.FuncAnimation(fig, animate, init_func=init,
-                               frames=250, interval=10, blit = True)
+                               frames=250, interval=20, blit = True)
+anim.save('car.mp4')
 
 plt.show()
